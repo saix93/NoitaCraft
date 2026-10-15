@@ -1,0 +1,101 @@
+{
+  "sheet": "scaling",
+  "about": "How Noita's numbers become Magicraft's. Anchored on Spark Bolt = Magicraft's Magic Bullet (Noita 800 px/s, 3 HP, 5 mana, 40 frames -> Magicraft 16 m/s, 10 damage, 3 MP, 0.67 s) and Magicraft's level curve.",
+  "columns": {
+    "key": "name",
+    "value": "number",
+    "why": "what it does"
+  },
+  "rows": [
+    {
+      "key": "pixelToMeter",
+      "value": 0.09,
+      "why": "Noita pixel in Magicraft metres (Mina's 19 px = 1.7 m); sizes and explosion radii"
+    },
+    {
+      "key": "speedScale",
+      "value": 0.02,
+      "why": "Noita px/s -> Magicraft m/s (800 -> 16)"
+    },
+    {
+      "key": "damageBase",
+      "value": 10,
+      "why": "Magicraft damage for 3 Noita HP"
+    },
+    {
+      "key": "damageExponent",
+      "value": 0.6,
+      "why": "damage = damageBase * (NoitaHP/3)^exp, so Noita's huge numbers stay in Magicraft's range"
+    },
+    {
+      "key": "manaBase",
+      "value": 3,
+      "why": "MP for 5 Noita mana"
+    },
+    {
+      "key": "manaExponent",
+      "value": 0.7,
+      "why": "MP = manaBase * (mana/5)^exp"
+    },
+    {
+      "key": "frameSeconds",
+      "value": 0.016667,
+      "why": "Noita runs at 60 frames per second"
+    },
+    {
+      "key": "minDuration",
+      "value": 0.12,
+      "why": "shortest projectile life in seconds"
+    },
+    {
+      "key": "maxDuration",
+      "value": 6,
+      "why": "longest projectile life in seconds (Magicraft rooms are small)"
+    },
+    {
+      "key": "maxExplosionRadius",
+      "value": 7,
+      "why": "biggest explosion radius in metres (the Nuke)"
+    },
+    {
+      "key": "knockbackScale",
+      "value": 3,
+      "why": "Noita knockback_force -> Magicraft knockback"
+    },
+    {
+      "key": "priceScale",
+      "value": 0.07,
+      "why": "Noita price -> Magicraft coins"
+    },
+    {
+      "key": "maxSpeedGain",
+      "value": 3,
+      "why": "an accelerating projectile (negative friction) stops speeding up at this multiple"
+    },
+    {
+      "key": "level2Damage",
+      "value": 1.6,
+      "why": "level 2 damage multiplier (Magicraft spells grow 1.3-2.5x per level)"
+    },
+    {
+      "key": "level3Damage",
+      "value": 2.6,
+      "why": "level 3 damage multiplier"
+    },
+    {
+      "key": "level2Mana",
+      "value": 1.3,
+      "why": "level 2 MP multiplier"
+    },
+    {
+      "key": "level3Mana",
+      "value": 1.7,
+      "why": "level 3 MP multiplier"
+    },
+    {
+      "key": "stopFraction",
+      "value": 0.12,
+      "why": "a projectile that has slowed below this share of its start speed has stopped: it ends there (and explodes if it explodes), as in Noita where a spent projectile lands"
+    }
+  ]
+}

@@ -1,0 +1,243 @@
+{
+  "sheet": "tests",
+  "about": "Checks the mod reports in a Melty test run (recipe test.checks). In test mode it picks Mina, starts a run and fires her Noita wand by itself; each run the wand holds a different group (testWands).",
+  "columns": {
+    "check": "name written as 'pass <check>' / 'fail <check>: why'",
+    "when": "when it is decided",
+    "passes": "what must be true"
+  },
+  "rows": [
+    {
+      "check": "noita-data",
+      "when": "plugin start",
+      "passes": "Noita's data.wak, gun_actions.lua and translations were read from NOITA_DIR"
+    },
+    {
+      "check": "spells-added",
+      "when": "after SpellConfig load",
+      "passes": "every spells.json and modifiers.json row became its own Magicraft spell with Noita's numbers"
+    },
+    {
+      "check": "mina-set",
+      "when": "main menu",
+      "passes": "set 13 and wands 9131/9132 are registered and unlocked"
+    },
+    {
+      "check": "noita-icons",
+      "when": "first icon request",
+      "passes": "a Noita spell icon was served as a Sprite"
+    },
+    {
+      "check": "own-tooltip",
+      "when": "run starts",
+      "passes": "a Noita spell in a wand slot resolves to itself (its own id, Noita name and icon), not to a Magicraft spell"
+    },
+    {
+      "check": "mina-look",
+      "when": "in the run",
+      "passes": "Mina's Noita frames are drawn on the player"
+    },
+    {
+      "check": "noita-in-pool",
+      "when": "run starts",
+      "passes": "Noita spells are in the run's spell drop pool alongside Magicraft's own"
+    },
+    {
+      "check": "noita-spell-cast",
+      "when": "in the run",
+      "passes": "a wand slot holding a Noita spell fired it"
+    },
+    {
+      "check": "noita-projectile",
+      "when": "first Noita projectile",
+      "passes": "the spell entity is its own Spell_<id> and is drawn with Noita's sprite"
+    },
+    {
+      "check": "noita-bounce",
+      "when": "first wall bounce",
+      "passes": "a Noita projectile bounced and lost Noita's bounce energy"
+    },
+    {
+      "check": "noita-explosion",
+      "when": "first explosion",
+      "passes": "an exploding Noita spell (Firebolt) blew up with Noita's explosion"
+    },
+    {
+      "check": "noita-sound",
+      "when": "first sound",
+      "passes": "a sound decoded from Noita's own sound bank played"
+    },
+    {
+      "check": "no-errors",
+      "when": "whole run",
+      "passes": "no game exception was logged during the run"
+    },
+    {
+      "check": "aim-follows",
+      "when": "casting",
+      "passes": "the game aims (and turns the wand) where the test points"
+    },
+    {
+      "check": "wand-points-aim",
+      "when": "wand look",
+      "passes": "the Noita wand in Mina's hand points where she aims (within 15 degrees), right, up, left and down, like Magicraft's wands"
+    }
+  ],
+  "testWands": {
+    "about": "test mode only: Mina's first wand holds a different group each run (Melty runs 3), left to right; modifiers change the projectile after them",
+    "columns": {
+      "run": "Melty run number",
+      "slots": "spell ids (newBase*10+1) in the wand"
+    },
+    "rows": [
+      {
+        "run": 1,
+        "slots": [
+          18011,
+          18031,
+          18081,
+          0
+        ]
+      },
+      {
+        "run": 2,
+        "slots": [
+          38011,
+          18021,
+          18181,
+          18111
+        ]
+      },
+      {
+        "run": 3,
+        "slots": [
+          38021,
+          18051,
+          18141,
+          18131
+        ]
+      }
+    ]
+  },
+  "combos": {
+    "about": "test mode: after the run's own wand, Mina's first wand is set to each combo in turn and fired (aimed, held down) for its seconds. Each passes when the wand cast it and no game error or exception was logged meanwhile.",
+    "columns": {
+      "id": "check name is combo-<id>",
+      "slots": "wand slots left to right (Noita newBase*10+1 or Magicraft spell ids)",
+      "seconds": "how long the cast button is held",
+      "why": "what it tries"
+    },
+    "rows": [
+      {
+        "id": "triplicate-damage",
+        "slots": [
+          38041,
+          18071,
+          0,
+          0
+        ],
+        "seconds": 12,
+        "why": "Noita Damage Plus on Noita Triplicate Bolt, held fire (the reported crash)"
+      },
+      {
+        "id": "noita-mod-magicraft-spell",
+        "slots": [
+          38021,
+          38011,
+          10011,
+          0
+        ],
+        "seconds": 10,
+        "why": "Noita Homing + Bounce on Magicraft Magic Bullet"
+      },
+      {
+        "id": "magicraft-mod-noita-spell",
+        "slots": [
+          30121,
+          31021,
+          18011,
+          0
+        ],
+        "seconds": 10,
+        "why": "Magicraft Rebound + Damage Boost on Noita Spark Bolt"
+      },
+      {
+        "id": "noita-multicast-magicraft",
+        "slots": [
+          38101,
+          10321,
+          38111,
+          10011
+        ],
+        "seconds": 10,
+        "why": "Noita Double Spell on Magicraft Star Bomb, Divide by 2 on Magic Bullet"
+      },
+      {
+        "id": "magicraft-multicast-noita",
+        "slots": [
+          30021,
+          18081,
+          30131,
+          18031
+        ],
+        "seconds": 10,
+        "why": "Magicraft Multicast on Firebolt, Split on Bouncing Burst"
+      },
+      {
+        "id": "divide-bomb",
+        "slots": [
+          38111,
+          18141,
+          0,
+          0
+        ],
+        "seconds": 10,
+        "why": "Divide by 2 on Bomb (explosions)"
+      },
+      {
+        "id": "pierce-blackhole",
+        "slots": [
+          38031,
+          18181,
+          0,
+          0
+        ],
+        "seconds": 8,
+        "why": "Piercing Shot on Black Hole"
+      },
+      {
+        "id": "heavy-speed-laser",
+        "slots": [
+          38051,
+          38061,
+          10041,
+          0
+        ],
+        "seconds": 8,
+        "why": "Heavy Shot + Speed Up on Magicraft Laser"
+      },
+      {
+        "id": "volley-mixed",
+        "slots": [
+          30011,
+          18071,
+          10011,
+          18011
+        ],
+        "seconds": 10,
+        "why": "Magicraft Volley over Triplicate Bolt, Magic Bullet and Spark Bolt"
+      },
+      {
+        "id": "charges-nuke",
+        "slots": [
+          38071,
+          38081,
+          18191,
+          0
+        ],
+        "seconds": 10,
+        "why": "Electric + Freeze Charge on Nuke"
+      }
+    ]
+  }
+}

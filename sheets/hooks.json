@@ -1,0 +1,244 @@
+{
+  "sheet": "hooks",
+  "about": "Every place NoitaCraft touches Magicraft (BepInEx 5 + Harmony). Each row generates one patch registration.",
+  "columns": {
+    "id": "hook id",
+    "target": "Magicraft type.method (decompiled Assembly-CSharp); for a transpiler, Type|code it rewrites",
+    "kind": "prefix | postfix | transpiler | api (Unity API override, no patch)",
+    "handler": "NoitaCraft method that runs",
+    "purpose": "what it does",
+    "sheets": "sheets it reads"
+  },
+  "rows": [
+    {
+      "id": "spell-rows",
+      "target": "SpellConfig+Initializer.ApplyResult",
+      "kind": "prefix",
+      "handler": "Hooks.SpellRows",
+      "purpose": "add every Noita spell and modifier as its own Magicraft spell (own id and ability type, Noita's numbers, 3 levels) plus a hidden explosion row; the drop pool, shops, tooltips and ECS configs all read this table",
+      "sheets": [
+        "spells",
+        "modifiers",
+        "scaling"
+      ]
+    },
+    {
+      "id": "cast",
+      "target": "ShootSpellUtils.ShootToDots",
+      "kind": "prefix",
+      "handler": "NoitaCast.ShootToDots",
+      "purpose": "build each spawn as Magicraft does, then give Noita spells their own entity and Noita's bounces, piercing, wall rules, teleport, black hole pull and damage type, and apply Noita modifiers to the next projectile",
+      "sheets": [
+        "spells",
+        "modifiers"
+      ]
+    },
+    {
+      "id": "modifier-mana",
+      "target": "SpellShootData.GetSpellManaCost",
+      "kind": "postfix",
+      "handler": "Hooks.ModifierMana",
+      "purpose": "Noita modifiers cost their Noita mana (and copies cost again); Magicraft charges enhancements nothing",
+      "sheets": [
+        "modifiers",
+        "scaling"
+      ]
+    },
+    {
+      "id": "spell-entities",
+      "target": "SpellSingleton.Prefabs",
+      "kind": "api",
+      "handler": "NoitaWorld.EnsurePrefab",
+      "purpose": "register Spell_<newBase> (copy of the plain bullet Spell_1001) and Spell_1890 (a still bullet scaled to the explosion radius, for Noita's explosions), with Magicraft's meshes switched off",
+      "sheets": [
+        "spells"
+      ]
+    },
+    {
+      "id": "noita-behavior",
+      "target": "spell entities (SpellConfigComponentData, SpellMovementComponentData)",
+      "kind": "api",
+      "handler": "NoitaWorld.LateUpdate",
+      "purpose": "every frame: Noita's bounce energy, air friction or acceleration, low-speed and spent-projectile end, explosions on death, and Noita's look and sounds",
+      "sheets": [
+        "spells",
+        "scaling"
+      ]
+    },
+    {
+      "id": "bounce-fx",
+      "target": "Prefabs[\"Spell_Rebound\"] instances",
+      "kind": "api",
+      "handler": "NoitaWorld.RemoveMagicraftBounceEffects",
+      "purpose": "remove Magicraft's bounce effect where a Noita projectile bounced (Noita's sparks are drawn there)",
+      "sheets": [
+        "spells"
+      ]
+    },
+    {
+      "id": "wand-rows",
+      "target": "WandConfig+Initializer.ApplyResult",
+      "kind": "prefix",
+      "handler": "Hooks.WandRows",
+      "purpose": "append Mina's Noita wands",
+      "sheets": [
+        "characters.wands"
+      ]
+    },
+    {
+      "id": "set-rows",
+      "target": "SetConfig+Initializer.ApplyResult",
+      "kind": "prefix",
+      "handler": "Hooks.SetRows",
+      "purpose": "append Mina's set",
+      "sheets": [
+        "characters.sets"
+      ]
+    },
+    {
+      "id": "text-rows",
+      "target": "TextConfig+Initializer.ApplyResult",
+      "kind": "prefix",
+      "handler": "Hooks.TextRows",
+      "purpose": "add names/descriptions in every Magicraft language Noita has",
+      "sheets": [
+        "spells",
+        "characters.sets",
+        "characters.wands"
+      ]
+    },
+    {
+      "id": "icons",
+      "target": "UnityEngine.ResourcesAPI.overrideAPI",
+      "kind": "api",
+      "handler": "NoitaResources",
+      "purpose": "serve Noita icons for Textures/SpellIcons/noita_* and Textures/WandIcons/noita_*",
+      "sheets": [
+        "spells",
+        "characters.wands"
+      ]
+    },
+    {
+      "id": "set-unlocked",
+      "target": "WorldData.IsSetUnlocked",
+      "kind": "prefix",
+      "handler": "Hooks.SetUnlocked",
+      "purpose": "Mina is always unlocked",
+      "sheets": [
+        "characters.sets"
+      ]
+    },
+    {
+      "id": "save-clean",
+      "target": "DataMgr.SaveWorldData",
+      "kind": "prefix",
+      "handler": "Hooks.SaveBefore",
+      "purpose": "keep Mina's set out of the save file (restored right after) so removing the mod never breaks a save",
+      "sheets": [
+        "characters.sets"
+      ]
+    },
+    {
+      "id": "save-restore",
+      "target": "DataMgr.SaveWorldData",
+      "kind": "postfix",
+      "handler": "Hooks.SaveAfter",
+      "purpose": "put Mina's set back in memory after saving",
+      "sheets": [
+        "characters.sets"
+      ]
+    },
+    {
+      "id": "gallery",
+      "target": "WorldData.GalleryUnlock",
+      "kind": "prefix",
+      "handler": "Hooks.Gallery",
+      "purpose": "don't record Noita spells/wands in the save's gallery",
+      "sheets": [
+        "spells",
+        "characters.wands"
+      ]
+    },
+    {
+      "id": "set-card",
+      "target": "UISetSlot.Initialize",
+      "kind": "postfix",
+      "handler": "Hooks.SetCard",
+      "purpose": "show Mina's Noita sprite on her set card",
+      "sheets": [
+        "characters.sets"
+      ]
+    },
+    {
+      "id": "world-picked",
+      "target": "DataMgr.SetSelectedWorldData",
+      "kind": "postfix",
+      "handler": "Hooks.WorldSelected",
+      "purpose": "Mina unlocked in the picked save slot, and her pick restored from NoitaCraft's own file",
+      "sheets": [
+        "characters.sets"
+      ]
+    },
+    {
+      "id": "test-no-saves",
+      "target": "DataMgr.SaveSelectedWorldData",
+      "kind": "prefix",
+      "handler": "Hooks.BlockInTest",
+      "purpose": "during a Melty test run nothing is written to the player's saves (also SaveWorldDataBackup, SaveBuildDatas and the other DataMgr save methods)",
+      "sheets": [
+        "tests"
+      ]
+    },
+    {
+      "id": "cast-oracle",
+      "target": "ShootSpellUtils.ShootSpellGroup",
+      "kind": "prefix",
+      "handler": "Hooks.Shot",
+      "purpose": "test mode: notice when a Noita spell is fired",
+      "sheets": [
+        "tests",
+        "spells"
+      ]
+    },
+    {
+      "id": "test-keeps-running",
+      "target": "GameMgr|Application.runInBackground = false",
+      "kind": "transpiler",
+      "handler": "Hooks.KeepRunning",
+      "purpose": "during a Melty test only, Magicraft keeps running when its window is behind others (it sets Application.runInBackground = false at the main menu)",
+      "sheets": [
+        "tests"
+      ]
+    },
+    {
+      "id": "spell-sounds",
+      "target": "SEPlayerSystem.OnUpdate",
+      "kind": "prefix",
+      "handler": "Hooks.SoundsBefore",
+      "purpose": "drop Magicraft's SE_Spell<id> requests for Noita spells (Noita's sounds play); a finalizer clears the sound queue if a missing sound throws, which otherwise repeats every frame and crashes the spell systems",
+      "sheets": [
+        "spells"
+      ]
+    },
+    {
+      "id": "test-aim",
+      "target": "PlayerController|Input.mousePosition",
+      "kind": "transpiler",
+      "handler": "Hooks.TestAim",
+      "purpose": "in a Melty test only, the game aims where the test points instead of the real cursor",
+      "sheets": [
+        "tests"
+      ]
+    },
+    {
+      "id": "player-look",
+      "target": "PlayerSkinMgr.SetSkin",
+      "kind": "postfix",
+      "handler": "Hooks.PlayerLook",
+      "purpose": "when Mina's set is picked, the player is drawn as Mina (Noita frames) instead of the Spine wizard",
+      "sheets": [
+        "characters.sets"
+      ]
+    }
+  ]
+}

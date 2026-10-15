@@ -1,0 +1,34 @@
+{
+  "sheet": "characters",
+  "about": "Mina, the Noita witch, as a Magicraft starting set (Magicraft's character pick in the camp). Her look comes from the player's Noita install (data/enemies_gfx/player.png + player.xml); her wands use Noita wand sprites and start loaded with Noita spells from spells.json.",
+  "sets": {
+    "columns": {
+      "setId": "Magicraft SetConfig id; must be 13 (UISet picks a set by index+1, Magicraft ships 1..12)",
+      "name": "shown name (Mina is not named in Noita's own text)",
+      "description": "one line under the name",
+      "wandIds": "wands.json rows, one per set upgrade level",
+      "upgradeCosts": "one cost per upgrade (length = wandIds - 1)",
+      "relicId": "starting relic (0 = none)",
+      "spriteXml": "Noita sprite definition read for her look",
+      "animations": "Noita RectAnimation names used: [idle, moving]",
+      "worldHeight": "her height in Magicraft world units",
+      "uiHeight": "her height in pixels on the set-picker card"
+    },
+    "rows": [
+      {"setId": 13, "name": "Mina", "description": "The Noita witch. Starts with Noita wands; Noita spells join the loot.", "wandIds": [9131, 9132], "upgradeCosts": [80], "relicId": 0, "spriteXml": "data/enemies_gfx/player.xml", "animations": ["stand", "walk"], "worldHeight": 1.7, "uiHeight": 220}
+    ]
+  },
+  "wands": {
+    "columns": {
+      "wandId": "new Magicraft WandConfig id (not in Magicraft)",
+      "cloneOf": "Magicraft wand whose stats are cloned",
+      "nameKey": "Noita translation key for the wand's name",
+      "icon": "Noita sprite used as the wand icon and in Mina's hand, laid along the diagonal of a canvas like Magicraft's own wand sprite (Magicraft turns that diagonal toward the aim)",
+      "slots": "starting spells, left to right (spells.json newBase*10+1, or 0 for empty)"
+    },
+    "rows": [
+      {"wandId": 9131, "cloneOf": 11, "nameKey": "item_wand", "icon": "data/items_gfx/handgun.png",   "slots": [18011, 18031, 18081, 0]},
+      {"wandId": 9132, "cloneOf": 12, "nameKey": "item_wand", "icon": "data/items_gfx/bomb_wand.png", "slots": [18011, 18011, 18031, 18081]}
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "sheet": "noita_sources",
+  "about": "What NoitaCraft reads from the player's own Noita install, found via NOITA_DIR in %LOCALAPPDATA%/NoitaCraft/noita.env (Melty fills it in with {game:noita}). Nothing is copied or shipped.",
+  "columns": {
+    "id": "source id",
+    "where": "archive | disk",
+    "path": "path inside data/data.wak, or relative to the Noita folder",
+    "format": "how it's parsed",
+    "gives": "what the mashup uses from it"
+  },
+  "rows": [
+    {"id": "wak",          "where": "disk",    "path": "data/data.wak",                        "format": "WAK archive: 16-byte header (0, fileCount, tocEnd, 0), then entries (offset, size, nameLen, name)", "gives": "every file below marked archive"},
+    {"id": "gun-actions",  "where": "archive", "path": "data/scripts/gun/gun_actions.lua",     "format": "Lua table; per action: id, name ($key), description ($key), sprite, mana", "gives": "spell names/description keys, icon path, mana"},
+    {"id": "translations", "where": "disk",    "path": "data/translations/common.csv",         "format": "CSV: key,en,ru,pt-br,es-es,de,fr-fr,it,pl,zh-cn,jp,ko", "gives": "spell and wand names/descriptions in every language"},
+    {"id": "spell-icons",  "where": "archive", "path": "data/ui_gfx/gun_actions/*.png",        "format": "PNG 16x16", "gives": "spell icons"},
+    {"id": "wand-icons",   "where": "archive", "path": "data/items_gfx/handgun.png, bomb_wand.png", "format": "PNG", "gives": "Mina's wand icons"},
+    {"id": "mina-xml",     "where": "archive", "path": "data/enemies_gfx/player.xml",          "format": "Sprite XML with RectAnimation (frame_count, frame_width, frame_height, frame_wait, frames_per_row, pos_x, pos_y)", "gives": "Mina's animation frames"},
+    {"id": "mina-png",     "where": "archive", "path": "data/enemies_gfx/player.png",          "format": "PNG sprite sheet", "gives": "Mina's pixels"}
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "mode": "installed",
+  "games": [
+    {
+      "slug": "custom-magicraft",
+      "role": "primary"
+    },
+    {
+      "slug": "noita",
+      "role": "companion"
+    }
+  ],
+  "components": [
+    {
+      "id": "main",
+      "fileName": "NoitaCraft-*.zip",
+      "label": "NoitaCraft",
+      "kind": "main",
+      "required": true
+    }
+  ],
+  "requirements": [
+    {
+      "kind": "loader",
+      "id": "bepinex-5"
+    }
+  ],
+  "mappings": [
+    {
+      "component": "main",
+      "from": "plugins/",
+      "to": "{game}/BepInEx/plugins/NoitaCraft"
+    }
+  ],
+  "launch": {
+    "kind": "game"
+  },
+  "settings": [
+    {
+      "file": "{localappdata}/NoitaCraft/noita.env",
+      "set": {
+        "NOITA_DIR": "{game:noita}"
+      }
+    }
+  ],
+  "runtimeData": [
+    "{localappdata}/NoitaCraft"
+  ],
+  "test": {
+    "checks": [
+      "noita-data",
+      "spells-added",
+      "mina-set",
+      "noita-icons",
+      "mina-look",
+      "noita-in-pool",
+      "noita-spell-cast"
+    ],
+    "minutes": 6
+  }
+}
