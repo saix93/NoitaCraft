@@ -31,6 +31,11 @@
       "component": "main",
       "from": "plugins/",
       "to": "{game}/BepInEx/plugins/NoitaCraft"
+    },
+    {
+      "component": "main",
+      "from": "vgmstream/",
+      "to": "{localappdata}/NoitaCraft/vgmstream"
     }
   ],
   "launch": {
@@ -53,10 +58,28 @@
       "spells-added",
       "mina-set",
       "noita-icons",
+      "own-tooltip",
       "mina-look",
       "noita-in-pool",
-      "noita-spell-cast"
+      "noita-spell-cast",
+      "noita-projectile",
+      "noita-bounce",
+      "noita-explosion",
+      "noita-sound",
+      "no-errors",
+      "aim-follows",
+      "wand-points-aim",
+      "combo-triplicate-damage",
+      "combo-noita-mod-magicraft-spell",
+      "combo-magicraft-mod-noita-spell",
+      "combo-noita-multicast-magicraft",
+      "combo-magicraft-multicast-noita",
+      "combo-divide-bomb",
+      "combo-pierce-blackhole",
+      "combo-heavy-speed-laser",
+      "combo-volley-mixed",
+      "combo-charges-nuke"
     ],
-    "minutes": 6
+    "minutes": 9
   }
 }
