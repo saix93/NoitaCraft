@@ -39,7 +39,8 @@
     }
   ],
   "launch": {
-    "kind": "game"
+    "kind": "uri",
+    "uri": "steam://rungameid/2103140"
   },
   "settings": [
     {
@@ -65,21 +66,8 @@
       "noita-projectile",
       "noita-bounce",
       "noita-explosion",
-      "noita-sound",
-      "no-errors",
-      "aim-follows",
-      "wand-points-aim",
-      "combo-triplicate-damage",
-      "combo-noita-mod-magicraft-spell",
-      "combo-magicraft-mod-noita-spell",
-      "combo-noita-multicast-magicraft",
-      "combo-magicraft-multicast-noita",
-      "combo-divide-bomb",
-      "combo-pierce-blackhole",
-      "combo-heavy-speed-laser",
-      "combo-volley-mixed",
-      "combo-charges-nuke"
+      "noita-sound"
     ],
-    "minutes": 9
+    "minutes": 5
   }
 }

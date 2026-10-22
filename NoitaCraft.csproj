@@ -10,7 +10,7 @@
     <NoWarn>MSB3277;CS1701;CS1702</NoWarn>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <Version>0.1.0</Version>
+    <Version>0.2.9</Version>
     <!-- where the games are on the build PC; only referenced, never copied -->
     <MagicraftDir Condition="'$(MagicraftDir)' == ''">E:\SteamLibrary\steamapps\common\Magicraft</MagicraftDir>
     <BepInExDir Condition="'$(BepInExDir)' == ''">$(USERPROFILE)\dl\bepinex\x\BepInEx\core</BepInExDir>

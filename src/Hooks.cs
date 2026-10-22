@@ -426,21 +426,21 @@ namespace NoitaCraft
         {
             Func<Type, string, MethodInfo> m = (t, n) => AccessTools.Method(t, n) ?? throw new MissingMethodException(t.Name, n);
             Func<string, HarmonyMethod> hm = n => new HarmonyMethod(typeof(Hooks), n);
-            h.Patch(m(typeof(SpellConfig.Initializer), "ApplyResult"), prefix: hm(nameof(SpellRows)));
-            h.Patch(m(typeof(WandConfig.Initializer), "ApplyResult"), prefix: hm(nameof(WandRows)));
-            h.Patch(m(typeof(SetConfig.Initializer), "ApplyResult"), prefix: hm(nameof(SetRows)));
-            h.Patch(m(typeof(TextConfig.Initializer), "ApplyResult"), prefix: hm(nameof(TextRows)));
-            h.Patch(m(typeof(WorldData), "IsSetUnlocked"), prefix: hm(nameof(SetUnlocked)));
-            h.Patch(m(typeof(DataMgr), "SaveWorldData"), prefix: hm(nameof(SaveBefore)), postfix: hm(nameof(SaveAfter)));
-            h.Patch(m(typeof(DataMgr), "SetSelectedWorldData"), postfix: hm(nameof(WorldSelected)));
-            h.Patch(m(typeof(WorldData), "GalleryUnlock"), prefix: hm(nameof(Gallery)));
-            h.Patch(m(typeof(UISetSlot), "Initialize"), postfix: hm(nameof(SetCard)));
-            h.Patch(AccessTools.Method(typeof(PlayerSkinMgr), "SetSkin", new[] { typeof(Spine.Skeleton), typeof(global::PlayerLook), typeof(List<RelicConfig>), typeof(bool), typeof(bool) }), postfix: hm(nameof(PlayerLook)));
-            h.Patch(m(typeof(ShootSpellUtils), "ShootSpellGroup"), prefix: hm(nameof(Shot)));
-            h.Patch(m(typeof(SpellShootData), "GetSpellManaCost"), postfix: hm(nameof(ModifierMana)));
-            NoitaCast.Patch(h);
-            h.Patch(m(typeof(SEPlayerSystem), "OnUpdate"), prefix: hm(nameof(SoundsBefore)), finalizer: hm(nameof(SoundsFinalizer)));
-            h.Patch(m(typeof(PlayerController), "Update"), transpiler: hm(nameof(TestAim)));
+            Try(() => h.Patch(m(typeof(SpellConfig.Initializer), "ApplyResult"), prefix: hm(nameof(SpellRows))));
+            Try(() => h.Patch(m(typeof(WandConfig.Initializer), "ApplyResult"), prefix: hm(nameof(WandRows))));
+            Try(() => h.Patch(m(typeof(SetConfig.Initializer), "ApplyResult"), prefix: hm(nameof(SetRows))));
+            Try(() => h.Patch(m(typeof(TextConfig.Initializer), "ApplyResult"), prefix: hm(nameof(TextRows))));
+            Try(() => h.Patch(m(typeof(WorldData), "IsSetUnlocked"), prefix: hm(nameof(SetUnlocked))));
+            Try(() => h.Patch(m(typeof(DataMgr), "SaveWorldData"), prefix: hm(nameof(SaveBefore)), postfix: hm(nameof(SaveAfter))));
+            Try(() => h.Patch(m(typeof(DataMgr), "SetSelectedWorldData"), postfix: hm(nameof(WorldSelected))));
+            Try(() => h.Patch(m(typeof(WorldData), "GalleryUnlock"), prefix: hm(nameof(Gallery))));
+            Try(() => h.Patch(m(typeof(UISetSlot), "Initialize"), postfix: hm(nameof(SetCard))));
+            Try(() => h.Patch(AccessTools.Method(typeof(PlayerSkinMgr), "SetSkin", new[] { typeof(Spine.Skeleton), typeof(global::PlayerLook), typeof(List<RelicConfig>), typeof(bool), typeof(bool) }), postfix: hm(nameof(PlayerLook))));
+            Try(() => h.Patch(m(typeof(ShootSpellUtils), "ShootSpellGroup"), prefix: hm(nameof(Shot))));
+            Try(() => h.Patch(m(typeof(SpellShootData), "GetSpellManaCost"), postfix: hm(nameof(ModifierMana))));
+            Try(() => NoitaCast.Patch(h));
+            Try(() => h.Patch(m(typeof(SEPlayerSystem), "OnUpdate"), prefix: hm(nameof(SoundsBefore)), finalizer: hm(nameof(SoundsFinalizer))));
+            Try(() => h.Patch(m(typeof(PlayerController), "Update"), transpiler: hm(nameof(TestAim))));
             foreach (Type nested in typeof(GameMgr).GetNestedTypes(AccessTools.all))
             {
                 MethodInfo next = AccessTools.Method(nested, "MoveNext");
@@ -455,8 +455,15 @@ namespace NoitaCraft
             foreach (string save in new[] { "SaveSelectedWorldData", "SaveWorldDataBackup", "SaveBuildDatas", "SaveBuildBackUp", "SaveEndlessBuildDatas", "SaveEndlessBuildBackUp", "SaveSettingData" })
             {
                 MethodInfo s = AccessTools.Method(typeof(DataMgr), save);
-                if (s != null) h.Patch(s, prefix: hm(nameof(BlockInTest)));
+                if (s != null) Try(() => h.Patch(s, prefix: hm(nameof(BlockInTest))));
             }
+        }
+
+        // one hook that no longer fits Magicraft (after a game update) is logged and skipped; the others still go in
+        static void Try(System.Action patch)
+        {
+            try { patch(); }
+            catch (Exception e) { Plugin.Log.LogError("hook not placed: " + e.Message); }
         }
     }
 }

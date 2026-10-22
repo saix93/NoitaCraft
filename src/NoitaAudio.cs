@@ -44,8 +44,10 @@ namespace NoitaCraft
                             Directory.CreateDirectory(dir);
                             var p = Process.Start(new ProcessStartInfo(cli, "-i -S 0 -o \"" + Path.Combine(dir, "?n.wav") + "\" \"" + src + "\"")
                             { CreateNoWindow = true, UseShellExecute = false, RedirectStandardOutput = true, RedirectStandardError = true });
+                            p.ErrorDataReceived += (o, e) => { };
+                            p.BeginErrorReadLine();
                             p.StandardOutput.ReadToEnd();
-                            p.WaitForExit(120000);
+                            if (!p.WaitForExit(120000)) { try { p.Kill(); } catch (Exception) { } Error = bank + ".bank took too long to decode"; continue; }
                             File.WriteAllText(stamp, want);
                         }
                         foreach (string wav in Directory.GetFiles(dir, "*.wav"))

@@ -63,7 +63,36 @@ namespace NoitaCraft
                     }
                 }
             string v = Environment.GetEnvironmentVariable("NOITA_DIR");
-            return !string.IsNullOrEmpty(v) && Directory.Exists(v) ? v : null;
+            if (!string.IsNullOrEmpty(v) && Directory.Exists(v)) return v;
+            return FromSteam();
+        }
+
+        // Noita in any of the player's Steam libraries, when the folder Melty gave isn't there
+        static string FromSteam()
+        {
+            try
+            {
+                var roots = new List<string>();
+                foreach (string s in new[] { Environment.GetEnvironmentVariable("ProgramFiles(x86)"), Environment.GetEnvironmentVariable("ProgramFiles") })
+                    if (!string.IsNullOrEmpty(s)) roots.Add(Path.Combine(s, "Steam"));
+                // Magicraft's own library: <library>/steamapps/common/Magicraft
+                var common = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).Parent;
+                if (common != null && common.Parent != null && common.Parent.Parent != null) roots.Add(common.Parent.Parent.FullName);
+                foreach (string root in roots.ToArray())
+                {
+                    var vdf = Path.Combine(Path.Combine(root, "steamapps"), "libraryfolders.vdf");
+                    if (!File.Exists(vdf)) continue;
+                    foreach (Match m in Regex.Matches(File.ReadAllText(vdf), "\"path\"\\s*\"([^\"]+)\""))
+                        roots.Add(m.Groups[1].Value.Replace("\\\\", "\\"));
+                }
+                foreach (string root in roots)
+                {
+                    var dir = Path.Combine(Path.Combine(Path.Combine(root, "steamapps"), "common"), "Noita");
+                    if (File.Exists(Path.Combine(Path.Combine(dir, "data"), "data.wak"))) return dir;
+                }
+            }
+            catch (Exception) { }
+            return null;
         }
 
         // WAK: int32 0, int32 fileCount, int32 tocEnd, int32 0; then per file int32 offset, int32 size, int32 nameLength, name.
